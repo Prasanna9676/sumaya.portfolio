@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Care Automation</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/2.0.4/lottie-player.js"></script>
+    <style>
+        :root {
+            --primary: #ef4444; 
+            --secondary: #991b1b;
+            --bg-light: #ffffff;
+            --glass-white: rgba(255, 255, 255, 0.8);
+            --glass-red: rgba(239, 68, 68, 0.05);
+            --border-red: rgba(239, 68, 68, 0.1);
+        }
+
+        body {
+            background: var(--bg-light);
+            color: #000000; /* Pure Black Text */
+            overflow-x: hidden;
+            min-height: 100vh;
+            perspective: 1200px;
+        }
+
+        /* Pure CSS 3D Background */
+        .scene-3d {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .object-3d {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+            border: 2px solid var(--border-red);
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            animation: rotate3d_v2 15s infinite linear;
+            transform-style: preserve-3d;
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.05);
+        }
+
+        @keyframes rotate3d_v2 {
+            0% { transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            50% { transform: translate3d(50px, -50px, 200px) rotateX(180deg) rotateY(180deg) rotateZ(45deg); }
+            100% { transform: translate3d(0, 0, 0) rotateX(360deg) rotateY(360deg) rotateZ(0deg); }
+        }
+
+        .obj-1 { top: 10%; left: 10%; animation-duration: 20s; }
+        .obj-2 { bottom: 10%; right: 10%; animation-duration: 25s; animation-delay: -5s; }
+        .obj-3 { top: 40%; right: 15%; animation-duration: 18s; animation-delay: -10s; }
+        .obj-4 { bottom: 40%; left: 15%; animation-duration: 22s; animation-delay: -15s; }
+
+        /* Background Soft Glows */
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(239, 68, 68, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(239, 68, 68, 0.03) 0%, transparent 40%);
+        }
+
+        nav {
+            background: var(--glass-white);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-red);
+            padding: 1.2rem 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ef4444, #991b1b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Floating Animations Container */
+        .floating-assets {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .anim-element {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
+            opacity: 0.8;
+        }
+
+        /* Using emojis as placeholders for requested 3D assets to ensure they load universally */
+        .robot {
+            font-size: 4rem;
+            animation-duration: 8s;
+        }
+
+        .pill {
+            font-size: 3rem;
+            animation-duration: 5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Positioning floating elements randomly */
+        .e1 { top: 15%; left: 10%; }
+        .e2 { top: 60%; right: 15%; animation-delay: -2s; }
+        .e3 { top: 20%; right: 10%; animation-delay: -4s; }
+        .e4 { bottom: 15%; left: 20%; animation-delay: -1s; }
+
+        footer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(5px);
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+            border-top: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Ambient Red & White Glows -->
+    <div class="ambient-glow"></div>
+
+    <!-- Pure CSS 3D Scene -->
+    <div class="scene-3d">
+        <div class="object-3d obj-1">🧬</div>
+        <div class="object-3d obj-2">💊</div>
+        <div class="object-3d obj-3">🩺</div>
+        <div class="object-3d obj-4">❤️</div>
+    </div>
+
+    <nav>
+        <a href="/" class="logo">HealthBot AI</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/services">Services</a>
+            {% if session.user_id %}
+                <a href="/dashboard">Dashboard</a>
+            {% endif %}
+            <a href="/contact">Contact</a>
+            {% if session.user_id %}
+                <span style="color: var(--primary); font-weight: bold; margin-left: 1rem;">Hi, {{ session.user_name }}</span>
+                <a href="/logout" style="color: #ff6b6b;">Logout</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Health Care Automation. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Dynamic Background Glow Color Shifting
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageBg = document.getElementById('pageBg');
+            const path = window.location.pathname;
+            
+            if (path === '/') {
+                pageBg.style.background = 'radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(153, 27, 27, 0.05) 0%, transparent 40%)';
+            } else if (path === '/about') {
+                pageBg.style.background = 'radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.03) 0%, transparent 60%), radial-gradient(circle at 10% 10%, rgba(153, 27, 27, 0.03) 0%, transparent 40%)';
+            } else if (path === '/services') {
+                pageBg.style.background = 'radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(153, 27, 27, 0.05) 0%, transparent 50%)';
+            } else if (path === '/dashboard') {
+                pageBg.style.background = 'radial-gradient(circle at 50% 10%, rgba(239, 68, 68, 0.04) 0%, transparent 40%), radial-gradient(circle at 50% 90%, rgba(153, 27, 27, 0.04) 0%, transparent 40%)';
+        // 3D Background Parallax Effect
+        document.addEventListener('mousemove', (e) => {
+            const assets = document.querySelectorAll('.floating-3d');
+            const x = (e.clientX - window.innerWidth / 2) / 30;
+            const y = (e.clientY - window.innerHeight / 2) / 30;
+            
+            assets.forEach(asset => {
+                const speed = asset.classList.contains('asset-1') ? 0.5 : 1;
+                asset.style.transform = `translate3d(${x * speed}px, ${y * speed}px, 0) rotateY(${x}deg) rotateX(${-y}deg)`;
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Symptom Checker - Healthcare Automation System{% endblock %}
+
+{% block extra_css %}
+.checker-header {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.symptom-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.symptom-badge {
+    background-color: #e9ecef;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid #ced4da;
+    transition: background-color 0.2s;
+}
+.symptom-badge.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+.result-section {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+.risk-high { border-left: 5px solid var(--danger-color); background-color: #f8d7da; }
+.risk-moderate { border-left: 5px solid var(--warning-color); background-color: #fff3cd; }
+.risk-low { border-left: 5px solid var(--secondary-color); background-color: #d4edda; }
+.symptom-list {
+    margin-bottom: 10px;
+}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="checker-header">🩺 Symptom Checker</h2>
+    <p class="text-center">Select or type your symptoms below to get an initial assessment.</p>
+    
+    <div class="symptom-badges" id="common-symptoms">
+        <span class="symptom-badge" onclick="toggleSymptom('Fever', this)">Fever</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Cough', this)">Cough</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Headache', this)">Headache</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Fatigue', this)">Fatigue</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Vomiting', this)">Vomiting</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Body Pain', this)">Body Pain</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Nausea', this)">Nausea</span>
+        <span class="symptom-badge" onclick="toggleSymptom('Stomach Pain', this)">Stomach Pain</span>
+        <span class="symptom-badge" style="border-color: red;" onclick="toggleSymptom('Chest Pain', this)">Chest Pain</span>
+        <span class="symptom-badge" style="border-color: red;" onclick="toggleSymptom('Breathing Difficulty', this)">Breathing Difficulty</span>
+    </div>
+
+    <form action="{{ url_for('checker') }}" method="POST" id="symptom-form">
+        <div class="form-group">
+            <label for="symptoms">Selected Symptoms (comma-separated):</label>
+            <input type="text" id="symptoms" name="symptoms" class="form-control" placeholder="E.g., Fever, Cough" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Analyze Symptoms</button>
+    </form>
+
+    {% if result %}
+    <div class="result-section risk-{{ risk_level | lower }}">
+        <h3>Analysis Result</h3>
+        <p><strong>Your Symptoms:</strong> {{ symptoms | join(', ') }}</p>
+        
+        <h4>Possible Conditions:</h4>
+        <ul>
+            {% for condition in conditions %}
+            <li>{{ condition }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h4>Precautions & Advice:</h4>
+        <ul>
+            {% for precaution in precautions %}
+            <li>{{ precaution }}</li>
+            {% endfor %}
+        </ul>
+        
+        {% if emergency %}
+        <div class="alert alert-danger" style="margin-top: 15px;">
+            <strong>⚠️ EMERGENCY WARNING:</strong> You have reported severe symptoms. Please seek immediate medical assistance.
+        </div>
+        {% endif %}
+        
+        <p style="font-size: 0.9em; color: #666; margin-top: 20px;">
+            <em>Disclaimer: This chatbot does not replace professional medical diagnosis. Please consult a doctor for a proper medical evaluation.</em>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+function toggleSymptom(symptom, element) {
+    element.classList.toggle('selected');
+    const inputField = document.getElementById('symptoms');
+    let currentSymptoms = inputField.value.split(',').map(s => s.trim()).filter(s => s !== "");
+    
+    if (element.classList.contains('selected')) {
+        if (!currentSymptoms.includes(symptom)) {
+            currentSymptoms.push(symptom);
+        }
+    } else {
+        currentSymptoms = currentSymptoms.filter(s => s !== symptom);
+    }
+    
+    inputField.value = currentSymptoms.join(', ');
+}
+
+document.getElementById('symptom-form').addEventListener('submit', function(e) {
+    const inputField = document.getElementById('symptoms');
+    if (inputField.value.trim() === '') {
+        e.preventDefault();
+        alert('Please enter or select at least one symptom.');
+    }
+});
+{% endblock %}

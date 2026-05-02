@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block bg_icon_1 %}💊{% endblock %}
+{% block bg_icon_2 %}🧪{% endblock %}
+{% block bg_icon_3 %}💉{% endblock %}
+{% block bg_icon_4 %}🌡️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .services-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .services-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .services-header h1 {
+        font-size: 3rem;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .diseases-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .disease-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: 15px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .disease-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--primary);
+    }
+
+    .disease-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 25px rgba(0, 210, 255, 0.15);
+    }
+
+    .disease-name {
+        font-size: 1.5rem;
+        color: #000000;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .tablet-info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px dashed rgba(0, 210, 255, 0.3);
+    }
+
+    .tablet-info h4 {
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .tablet-name {
+        color: #000000;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="services-section">
+    <div class="services-header">
+        <h1>Common Conditions & Remedies</h1>
+        <p style="color: #000000;">A reference guide for basic over-the-counter tablets for common ailments. <strong>Do not self-medicate for severe issues.</strong></p>
+    </div>
+
+    <div class="diseases-grid">
+        {% set current_category = "" %}
+        {% for item in diseases_data %}
+        <div class="disease-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <span style="background: rgba(0, 210, 255, 0.15); color: var(--primary); font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px;">
+                    {{ item.category or "General" }}
+                </span>
+            </div>
+            <h3 class="disease-name">🤒 {{ item.disease }}</h3>
+            <p style="color: #000000; margin-bottom: 1.5rem; font-size: 0.9rem; line-height: 1.4; font-weight: 500;">{{ item.symptoms }}</p>
+            <div class="tablet-info">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                    <div style="flex: 1;">
+                        <h4>Suggested Remedy 💊</h4>
+                        <div class="tablet-name" style="font-size: 1rem;">{{ item.tablet }}</div>
+                    </div>
+                    <a href="https://www.1mg.com/search/all?name={{ item.tablet | urlencode }}" target="_blank" style="
+                        background: linear-gradient(45deg, var(--primary), var(--secondary));
+                        color: white;
+                        padding: 0.4rem 1rem;
+                        border-radius: 50px;
+                        text-decoration: none;
+                        font-size: 0.75rem;
+                        font-weight: 700;
+                        transition: all 0.3s ease;
+                        white-space: nowrap;
+                    ">Buy Now</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
